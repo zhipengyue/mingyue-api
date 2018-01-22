@@ -155,7 +155,7 @@ class UserController extends AbstractController {
   async captcha () {
     const { token, buffer } = await captcha()
     // fs.createWriteStream('captcha.gif').on('finish', () => console.log(token)).end(buffer)
-    let data = { token: md5(token, this.config.md5Key), image: 'data:image/png;base64,' + buffer.toString('base64') }
+    let data = { token: md5(token, this.config.md5Key), image: 'data:image/png;base64,' + buffer.toString('base64'), status: 200 }
     this.success(data)
   }
   async update () {
