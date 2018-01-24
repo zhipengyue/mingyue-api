@@ -17,31 +17,20 @@ class DepartmentService extends Service {
     const department = await this.app.mysql.get('departments', { departmentId: id })
     return department
   }
-  async setChild (parentId,childId) {
-    const department=await this.getById(parentId)
-    var children=department.children
-    if(children){
-      children=JSON.parse(children)
-      children.push(childId)
-    }else{
-      children=[]
-      children.push(childId)
-    }
-    children=JSON.stringify(children)
-    // department.children=children
+  async update (department) {
     const row = {
       id: department.Id,
-      children: children
+      departmentName: department.departmentName
     };
     const rs=await this.app.mysql.update('departments',row)
     return rs
   }
   async create (department) {
     var timestamp = Date.parse(new Date())
-    department.departmentId = 'epartment_' + timestamp
+    department.departmentId = 'department_' + timestamp
     department.updateTime = new Date()
     const result = await this.app.mysql.insert('departments', department)
-    return { status: 200, data: null, message: 'success!', result: result }
+    return result
   }
 }
 

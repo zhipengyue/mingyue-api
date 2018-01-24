@@ -57,4 +57,5 @@ module.exports = app => {
   // department
   app.get('/department/getlist', 'department.getlist')
   app.post('/department/add', 'department.add')
+  app.post('/department/edit', 'department.edit')
 }
