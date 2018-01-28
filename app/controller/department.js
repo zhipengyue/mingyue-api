@@ -39,25 +39,36 @@ class DepartmentController extends AbstractController {
   }
   async delete () {
     var departments = this.ctx.request.body
-    const exist = await this.service.department.getById(department.departmentId)
-    if (exist) {
-      var children=[];
-      children=this.treeToArray(department)
-      console.log(children)
-    }else{
-      this.error('err')
+    let departmentIds=[]
+    for(let i=0;i<departments.length;i++){
+      let departmentId=departments[i].departmentId
+      departmentIds.push(departmentId)
     }
-  }
-  treeToArray(tree){
-    var arr=[]
-    if(tree.children&&tree.children.length>0){
-      for(let i=0;i<tree.children.length;i++){
-        var child=tree.children[i]
-        arr.push(...this.treeToArray(child))
+    const getlist = await this.service.department.getByIds(departmentIds)
+    if(getlist.length>0){
+      let departmentIds=[]
+      for(let i=0;i<getlist.length;i++){
+        let departmentId=getlist[i].departmentId
+        departmentIds.push(departmentId)
       }
+      const deleteResult = await this.service.department.deleteByIds(departmentIds)
+      console.log(deleteResult)
+      if(deleteResult.affectedRows>0){
+        this.success({'status':200,message:deleteResult.message})
+      }else{
+        this.error()
+      }
+
+    }else{
+      this.error()
     }
-    arr.push(tree)
-    return arr
+    // if (exist) {
+    //   var children=[];
+    //   children=this.treeToArray(department)
+    //   console.log(children)
+    // }else{
+    //   this.error('err')
+    // }
   }
 }
 

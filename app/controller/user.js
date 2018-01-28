@@ -132,15 +132,17 @@ class UserController extends AbstractController {
     var claims = {
       sub: user,
       iss: 'MINGYUE|zhipengyue',
-      permissions: 'read,delet,edit'
+      permissions: 'read,delet,edit,add'
     }
     var jwt = nJwt.create(claims, this.config.md5Key)
-    var timerStamp = Date.parse(new Date()) + 60 * 1000 * 3 // 10分钟
+    var timerStamp = Date.parse(new Date()) + 60 * 1000 * 60 // 60分钟
     var exptime = new Date(timerStamp).toLocaleString()
     jwt.setExpiration(exptime)
     var token = jwt.compact()
     // this.service.cookie.setUser(user)
-    this.success({token: token, user: user})
+    this.ctx.set('Access-Control-Expose-Headers','token')
+    this.ctx.set('token',token)
+    this.success({user: user})
   }
   async regist () {
     const info = this.ctx.request.body

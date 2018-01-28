@@ -56,7 +56,12 @@ module.exports = app => {
 
   // department
   app.get('/department/getlist', 'department.getlist')
-  app.post('/department/add', 'department.add')
-  app.post('/department/edit', 'department.edit')
-  app.post('/department/delete','department.delete')
+  app.post('/server/department/add', 'department.add')
+  app.post('/server/department/edit', 'department.edit')
+  app.post('/server/department/delete','department.delete')
+  //职位管理
+  app.get('/position/getlist', 'position.getlist')
+  app.post('/server/position/add', 'position.add')
+  app.post('/server/position/edit', 'position.edit')
+  app.post('/server/position/delete','position.delete')
 }

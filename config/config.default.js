@@ -27,7 +27,7 @@ module.exports = appInfo => {
       agent: false
     },
     // cookie 加密的keys
-    keys: `${appInfo.name}_{{cookie_secret_key}}`,
+    keys: 'MINGYUE_2018',//`${appInfo.name}_{{cookie_secret_key}}`,
     // 密码加密的key
     md5Key: 'MINGYUE_2018',
     // 允许跨域携带cookie

@@ -10,6 +10,7 @@
     "egg-jwt": "^2.2.0",
     "egg-mongoose": "^2.1.1",
     "egg-mysql": "^3.0.0",
+    "jugglingdb-mysql": "latest",
     "egg-validate": "^1.0.0",
     "http-assert": "^1.3.0",
     "jsjws": "^5.0.2",
