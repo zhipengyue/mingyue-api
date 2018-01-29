@@ -134,15 +134,24 @@ class UserController extends AbstractController {
       iss: 'MINGYUE|zhipengyue',
       permissions: 'read,delet,edit,add'
     }
-    var jwt = nJwt.create(claims, this.config.md5Key)
-    var timerStamp = Date.parse(new Date()) + 60 * 1000 * 60 // 60分钟
-    var exptime = new Date(timerStamp).toLocaleString()
-    jwt.setExpiration(exptime)
-    var token = jwt.compact()
-    // this.service.cookie.setUser(user)
-    this.ctx.set('Access-Control-Expose-Headers','token')
-    this.ctx.set('token',token)
-    this.success({user: user})
+    if(user.active===0){
+      /**
+       * active 为0 ，需要激活账户，否则不生成token
+       */
+      this.error({msg:'账户未激活',code:{needActive:true}})
+    }else{
+      var jwt = nJwt.create(claims, this.config.md5Key)
+      var timerStamp = Date.parse(new Date()) + 60 * 1000 * 60 // 60分钟
+      var exptime = new Date(timerStamp).toLocaleString()
+      jwt.setExpiration(exptime)
+      var token = jwt.compact()
+      // this.service.cookie.setUser(user)
+      this.ctx.set('Access-Control-Expose-Headers','token')
+      this.ctx.set('token',token)
+      this.success({user: user})
+    }
+    
+    
   }
   async regist () {
     const info = this.ctx.request.body

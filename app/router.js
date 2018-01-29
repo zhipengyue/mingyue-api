@@ -66,4 +66,6 @@ module.exports = app => {
   app.post('/server/position/delete','position.delete')
   //upload 
   app.post('/upload/image','upload.create')
+  //staff
+  app.post('/server/staff/create','staff.create')
 }
