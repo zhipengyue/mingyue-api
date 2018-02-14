@@ -100,24 +100,25 @@ class UserController extends AbstractController {
   async create () {
     const info = this.ctx.request.body
     const user = await this.service.user.getByEmail(info.email)
-    if (user) {
-      this.error('此邮箱已被注册')
+    if (!user) {
+      this.error(`激活账户 ${info.email} 不存在`)
       return null
     }
-    console.log(info)
-    if (info.token === md5(info.captcha, this.config.md5Key) && info.agree) {
       delete info.token
       delete info.agree
       delete info.checkPassword
       delete info.phoneNumberPrefix
       delete info.captcha
 
-      const rs = await this.service.user.create(info)
-      delete rs.password
-      this.service.cookie.setUser(rs)
-      let result = {status: 200, message: 'success', data: rs}
-      this.success(result)
-    }
+      info['id']=user.Id
+      info.active=1
+      const rs = await this.service.user.update(info)
+      //this.service.cookie.setUser(rs)
+      if(rs){
+        this.success({status: 200, message: 'success', data: rs})
+      }else{
+        this.error(rs)
+      }
   }
   async login () {
     const info = this.ctx.request.body
@@ -138,7 +139,7 @@ class UserController extends AbstractController {
       /**
        * active 为0 ，需要激活账户，否则不生成token
        */
-      this.error({msg:'账户未激活',code:{needActive:true}})
+      this.success({message:'账户未激活',code:{needActive:true},userId:user.userId})
     }else{
       var jwt = nJwt.create(claims, this.config.md5Key)
       var timerStamp = Date.parse(new Date()) + 60 * 1000 * 60 // 60分钟
@@ -181,6 +182,18 @@ class UserController extends AbstractController {
     delete rs.password
     this.service.cookie.setUser(rs)
     this.success(rs)
+  }
+  async getAccountById(){
+    let info=this.ctx.request.body
+    let userId=info['userId']
+    console.log(info)
+    const user = await this.service.user.getById(userId)
+    if(user){
+      delete user.password
+      this.success(user)
+    }else{
+      this.error({msg:user})
+    }
   }
   async updatePassword () {
     const { originPassword, password, verifyPassword } = this.ctx.request.body

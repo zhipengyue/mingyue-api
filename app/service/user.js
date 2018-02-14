@@ -22,10 +22,12 @@ class UserService extends Service {
     const user = await this.app.mysql.get('userList', { email: email })
     return user
   }
-  getById (id) {
-    return this.ctx.model.User.findOne({
-      _id: id
-    })
+  async getById (id) {
+    // return this.ctx.model.User.findOne({
+    //   _id: id
+    // })
+    const user = await this.app.mysql.get('userList', { userId: id })
+    return user
   }
   getByIds (ids) {
     return this.ctx.model.User.find({
@@ -61,15 +63,9 @@ class UserService extends Service {
       modifiedTime: new Date()
     }, { new: true }).lean()
   }
-  update (user) {
-    const authId = this.ctx.authUser._id
-    return this.ctx.model.User.findOneAndUpdate({
-      _id: authId
-    }, {
-      name: user.name,
-      email: user.email,
-      modifiedTime: new Date()
-    }, { new: true }).lean()
+  async update (user) {
+    const rs=await this.app.mysql.update('userList',user)
+    return rs
   }
 }
 

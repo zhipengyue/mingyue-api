@@ -53,6 +53,7 @@ module.exports = app => {
   app.put('/server/user/password', 'user.updatePassword')
   app.put('/server/user', 'user.update')
   app.get('/server/user/search', 'user.search')
+  app.post('/auth/user/getAccountById','user.getAccountById')
 
   // department
   app.get('/department/getlist', 'department.getlist')
